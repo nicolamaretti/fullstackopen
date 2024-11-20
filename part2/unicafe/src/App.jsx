@@ -4,15 +4,10 @@ const Button = ({ text, handleClick }) => {
 	return <button onClick={handleClick}>{text}</button>;
 };
 
-const Statistics = (props) => {
+const Statistics = ({ goodVal, neutralVal, badVal, allVal, averageVal, positiveVal }) => {
 	let feedbackGiven = false;
 
-	Object.values(props).forEach((prop) => {
-		if (prop !== 0) {
-			feedbackGiven = true;
-			return;
-		}
-	});
+	if (goodVal !== 0 || neutralVal !== 0 || badVal !== 0) feedbackGiven = true;
 
 	if (!feedbackGiven)
 		return (
@@ -25,12 +20,12 @@ const Statistics = (props) => {
 		return (
 			<div>
 				<h1>Statistics</h1>
-				<p>good {props.goodVal}</p>
-				<p>neutral {props.neutralVal}</p>
-				<p>bad {props.badVal}</p>
-				<p>all {props.allVal}</p>
-				<p>average {props.averageVal}</p>
-				<p>positive {props.positiveVal} %</p>
+				<p>good {goodVal}</p>
+				<p>neutral {neutralVal}</p>
+				<p>bad {badVal}</p>
+				<p>all {allVal}</p>
+				<p>average {averageVal}</p>
+				<p>positive {positiveVal} %</p>
 			</div>
 		);
 };
