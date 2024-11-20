@@ -8,9 +8,10 @@ const StatisticLine = ({ text, value }) => {
 	if (text === "positive") value += " %";
 
 	return (
-		<p>
-			{text} {value}
-		</p>
+		<tr>
+			<td>{text}</td>
+			<td> {value}</td>
+		</tr>
 	);
 };
 
@@ -30,30 +31,34 @@ const Statistics = ({ goodVal, neutralVal, badVal, allVal, averageVal, positiveV
 		return (
 			<div>
 				<h1>Statistics</h1>
-				<StatisticLine
-					text="good"
-					value={goodVal}
-				/>
-				<StatisticLine
-					text="neutral"
-					value={neutralVal}
-				/>
-				<StatisticLine
-					text="bad"
-					value={badVal}
-				/>
-				<StatisticLine
-					text="all"
-					value={allVal}
-				/>
-				<StatisticLine
-					text="average"
-					value={averageVal}
-				/>
-				<StatisticLine
-					text="positive"
-					value={positiveVal}
-				/>
+				<table>
+					<tbody>
+						<StatisticLine
+							text="good"
+							value={goodVal}
+						/>
+						<StatisticLine
+							text="neutral"
+							value={neutralVal}
+						/>
+						<StatisticLine
+							text="bad"
+							value={badVal}
+						/>
+						<StatisticLine
+							text="all"
+							value={allVal}
+						/>
+						<StatisticLine
+							text="average"
+							value={averageVal}
+						/>
+						<StatisticLine
+							text="positive"
+							value={positiveVal}
+						/>
+					</tbody>
+				</table>
 			</div>
 		);
 };
