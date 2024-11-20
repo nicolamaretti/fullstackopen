@@ -4,6 +4,16 @@ const Button = ({ text, handleClick }) => {
 	return <button onClick={handleClick}>{text}</button>;
 };
 
+const StatisticLine = ({ text, value }) => {
+	if (text === "positive") value += " %";
+
+	return (
+		<p>
+			{text} {value}
+		</p>
+	);
+};
+
 const Statistics = ({ goodVal, neutralVal, badVal, allVal, averageVal, positiveVal }) => {
 	let feedbackGiven = false;
 
@@ -20,12 +30,30 @@ const Statistics = ({ goodVal, neutralVal, badVal, allVal, averageVal, positiveV
 		return (
 			<div>
 				<h1>Statistics</h1>
-				<p>good {goodVal}</p>
-				<p>neutral {neutralVal}</p>
-				<p>bad {badVal}</p>
-				<p>all {allVal}</p>
-				<p>average {averageVal}</p>
-				<p>positive {positiveVal} %</p>
+				<StatisticLine
+					text="good"
+					value={goodVal}
+				/>
+				<StatisticLine
+					text="neutral"
+					value={neutralVal}
+				/>
+				<StatisticLine
+					text="bad"
+					value={badVal}
+				/>
+				<StatisticLine
+					text="all"
+					value={allVal}
+				/>
+				<StatisticLine
+					text="average"
+					value={averageVal}
+				/>
+				<StatisticLine
+					text="positive"
+					value={positiveVal}
+				/>
 			</div>
 		);
 };
@@ -81,8 +109,6 @@ const App = () => {
 	};
 
 	const updatePositive = (goodVal, allVal) => {
-		console.log(goodVal, allVal);
-
 		const result = (goodVal / allVal) * 100;
 		setPositive(result);
 	};
