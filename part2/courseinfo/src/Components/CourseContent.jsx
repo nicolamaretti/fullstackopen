@@ -1,13 +1,11 @@
 import CoursePart from "./CoursePart";
 
 const CourseContent = ({ parts }) => {
-	let exercisesTotal = 0;
+	const exercisesTotal = Object.values(parts).reduce((sum, part) => (sum += part.exercises), 0);
 
 	return (
 		<div>
 			{parts.map((part) => {
-				exercisesTotal += part.exercises;
-
 				return (
 					<CoursePart
 						key={part.id}
@@ -16,6 +14,7 @@ const CourseContent = ({ parts }) => {
 					/>
 				);
 			})}
+
 			<p style={{ fontWeight: 700 }}>total of {exercisesTotal} exercises</p>
 		</div>
 	);
