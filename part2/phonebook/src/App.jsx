@@ -1,10 +1,11 @@
 import { useState } from "react";
 
 const App = () => {
-	const [people, setPeople] = useState([{ name: "Arto Hellas" }]);
+	const [people, setPeople] = useState([{ name: "Arto Hellas", number: "1234567890" }]);
 	const [newName, setNewName] = useState("");
+	const [newNumber, setNewNumber] = useState("");
 
-	const addPerson = (event) => {
+	const addInfos = (event) => {
 		event.preventDefault();
 
 		const found = people.find((person) => person.name === newName);
@@ -16,20 +17,26 @@ const App = () => {
 
 		const person = {
 			name: newName,
+			number: newNumber,
 		};
 
 		setPeople(people.concat(person));
 		setNewName("");
+		setNewNumber("");
 	};
 
 	const handleChangeName = (event) => {
 		setNewName(event.target.value);
 	};
 
+	const handleChangeNumber = (event) => {
+		setNewNumber(event.target.value);
+	};
+
 	return (
 		<div>
 			<h2>Phonebook</h2>
-			<form onSubmit={addPerson}>
+			<form onSubmit={addInfos}>
 				<div>
 					name:{" "}
 					<input
@@ -38,12 +45,21 @@ const App = () => {
 					/>
 				</div>
 				<div>
+					number:{" "}
+					<input
+						value={newNumber}
+						onChange={handleChangeNumber}
+					/>
+				</div>
+				<div>
 					<button type="submit">add</button>
 				</div>
 			</form>
 			<h2>Numbers</h2>
 			{people.map((person) => (
-				<p key={person.name}>{person.name}</p>
+				<p key={person.name}>
+					{person.name} {person.number}
+				</p>
 			))}
 		</div>
 	);
