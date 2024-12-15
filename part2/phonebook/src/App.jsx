@@ -51,6 +51,14 @@ const App = () => {
 		setFilter(event.target.value);
 	};
 
+	const handlePersonDeletion = (person) => {
+		if (window.confirm(`Delete ${person.name}?`))
+			peopleService
+				.deletePerson(person.id)
+				.then(() => setPeople(people.filter((p) => person.id !== p.id)))
+				.catch((error) => alert(error.message));
+	};
+
 	return (
 		<div>
 			<h2>Phonebook</h2>
@@ -74,6 +82,7 @@ const App = () => {
 			<PeopleList
 				people={people}
 				filter={filter}
+				handleDeleteClick={handlePersonDeletion}
 			/>
 		</div>
 	);
