@@ -16,16 +16,28 @@ const App = () => {
 		});
 	}, []);
 
-	const addInfos = (event) => {
+	const handleAddButtonClicked = (event) => {
 		event.preventDefault();
 
-		const found = people.find((person) => person.name === newName);
+		const foundPerson = people.find((person) => person.name === newName);
 
-		if (found) {
-			alert(`${newName} is already added to phonebook`);
-			return;
+		if (foundPerson) {
+			if (
+				window.confirm(
+					`${newName} is already added to phonebook, replace the old number with a new one?`
+				)
+			)
+				updateInfos(foundPerson);
+			else return;
+		} else {
+			addInfos();
 		}
 
+		setNewName("");
+		setNewNumber("");
+	};
+
+	const addInfos = () => {
 		const person = {
 			name: newName,
 			number: newNumber,
@@ -34,9 +46,15 @@ const App = () => {
 		peopleService.addPerson(person).then((addedPerson) => {
 			setPeople(people.concat(addedPerson));
 		});
+	};
 
-		setNewName("");
-		setNewNumber("");
+	const updateInfos = (person) => {
+		peopleService
+			.updatePerson({ ...person, number: newNumber })
+			.then((updatedPerson) =>
+				setPeople(people.map((p) => (p.id === updatedPerson.id ? updatedPerson : p)))
+			)
+			.catch((error) => alert(error.message));
 	};
 
 	const handleChangeName = (event) => {
@@ -72,7 +90,7 @@ const App = () => {
 
 			<h2>add a new</h2>
 			<Form
-				addInfos={addInfos}
+				handleAddButtonClicked={handleAddButtonClicked}
 				newName={newName}
 				handleChangeName={handleChangeName}
 				newNumber={newNumber}
