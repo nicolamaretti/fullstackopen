@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import Form from "./components/Form";
+import Notification from "./components/Notification";
 import PeopleList from "./components/PeopleList";
 import peopleService from "./services/people";
 
@@ -9,6 +10,7 @@ const App = () => {
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
 	const [filter, setFilter] = useState("");
+	const [notificationMessage, setNotificationMessage] = useState(null);
 
 	useEffect(() => {
 		peopleService.getAll().then((people) => {
@@ -26,13 +28,16 @@ const App = () => {
 				window.confirm(
 					`${newName} is already added to phonebook, replace the old number with a new one?`
 				)
-			)
+			) {
 				updateInfos(foundPerson);
-			else return;
+				setNotificationMessage(`Updated ${foundPerson.name}`);
+			} else return;
 		} else {
 			addInfos();
+			setNotificationMessage(`Added ${newName}`);
 		}
 
+		hideNotificationMessage();
 		setNewName("");
 		setNewNumber("");
 	};
@@ -51,9 +56,10 @@ const App = () => {
 	const updateInfos = (person) => {
 		peopleService
 			.updatePerson({ ...person, number: newNumber })
-			.then((updatedPerson) =>
-				setPeople(people.map((p) => (p.id === updatedPerson.id ? updatedPerson : p)))
-			)
+			.then((updatedPerson) => {
+				setPeople(people.map((p) => (p.id === updatedPerson.id ? updatedPerson : p)));
+				hideNotificationMessage();
+			})
 			.catch((error) => alert(error.message));
 	};
 
@@ -73,13 +79,24 @@ const App = () => {
 		if (window.confirm(`Delete ${person.name}?`))
 			peopleService
 				.deletePerson(person.id)
-				.then(() => setPeople(people.filter((p) => person.id !== p.id)))
+				.then(() => {
+					setPeople(people.filter((p) => person.id !== p.id));
+					setNotificationMessage(`Deleted ${person.name}`);
+					hideNotificationMessage();
+				})
 				.catch((error) => alert(error.message));
+	};
+
+	const hideNotificationMessage = () => {
+		setTimeout(() => {
+			setNotificationMessage(null);
+		}, 3000);
 	};
 
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<Notification message={notificationMessage} />
 			<div>
 				filter shown with
 				<Filter
