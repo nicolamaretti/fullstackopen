@@ -11,6 +11,7 @@ const App = () => {
 	const [newNumber, setNewNumber] = useState("");
 	const [filter, setFilter] = useState("");
 	const [notificationMessage, setNotificationMessage] = useState(null);
+	const [type, setType] = useState(null);
 
 	useEffect(() => {
 		peopleService.getAll().then((people) => {
@@ -30,11 +31,11 @@ const App = () => {
 				)
 			) {
 				updateInfos(foundPerson);
-				setNotificationMessage(`Updated ${foundPerson.name}`);
+				showNotificationMessage("success", `Updated ${foundPerson.name}`);
 			} else return;
 		} else {
 			addInfos();
-			setNotificationMessage(`Added ${newName}`);
+			showNotificationMessage("success", `Added ${newName}`);
 		}
 
 		hideNotificationMessage();
@@ -58,9 +59,11 @@ const App = () => {
 			.updatePerson({ ...person, number: newNumber })
 			.then((updatedPerson) => {
 				setPeople(people.map((p) => (p.id === updatedPerson.id ? updatedPerson : p)));
-				hideNotificationMessage();
 			})
-			.catch((error) => alert(error.message));
+			.catch((error) => {
+				showNotificationMessage("error", error.message);
+				hideNotificationMessage();
+			});
 	};
 
 	const handleChangeName = (event) => {
@@ -81,10 +84,21 @@ const App = () => {
 				.deletePerson(person.id)
 				.then(() => {
 					setPeople(people.filter((p) => person.id !== p.id));
-					setNotificationMessage(`Deleted ${person.name}`);
+					showNotificationMessage("success", `Deleted ${person.name}`);
 					hideNotificationMessage();
 				})
-				.catch((error) => alert(error.message));
+				.catch(() => {
+					showNotificationMessage(
+						"error",
+						`Information of ${person.name} has already been removed from the server`
+					);
+					hideNotificationMessage();
+				});
+	};
+
+	const showNotificationMessage = (type, message) => {
+		setType(type);
+		setNotificationMessage(message);
 	};
 
 	const hideNotificationMessage = () => {
@@ -96,7 +110,10 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
-			<Notification message={notificationMessage} />
+			<Notification
+				message={notificationMessage}
+				type={type}
+			/>
 			<div>
 				filter shown with
 				<Filter
