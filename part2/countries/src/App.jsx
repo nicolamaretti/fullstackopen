@@ -22,6 +22,12 @@ const App = () => {
 			.catch((error) => alert(error.message));
 	};
 
+	const handleShowButtonClicked = (countryName) => {
+		countriesService.getCountryByName(countryName).then((data) => {
+			setCountries([data]);
+		});
+	};
+
 	return (
 		<div>
 			<SearchForm
@@ -29,7 +35,10 @@ const App = () => {
 				handleValueChange={handleChangeValue}
 				handleSubmit={handleSumbit}
 			/>
-			<CountriesList countries={countries} />
+			<CountriesList
+				countries={countries}
+				handleShowButtonClicked={handleShowButtonClicked}
+			/>
 		</div>
 	);
 };
