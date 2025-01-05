@@ -14,9 +14,12 @@ const App = () => {
 	const [type, setType] = useState(null);
 
 	useEffect(() => {
-		peopleService.getAll().then((people) => {
-			setPeople(people);
-		});
+		peopleService
+			.getAll()
+			.then((people) => {
+				setPeople(people);
+			})
+			.catch((error) => console.log(error));
 	}, []);
 
 	const handleAddButtonClicked = (event) => {
