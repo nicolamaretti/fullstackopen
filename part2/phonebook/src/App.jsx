@@ -34,16 +34,10 @@ const App = () => {
 				)
 			) {
 				updateInfos(foundPerson);
-				showNotificationMessage("success", `Updated ${foundPerson.name}`);
 			} else return;
 		} else {
 			addInfos();
-			showNotificationMessage("success", `Added ${newName}`);
 		}
-
-		hideNotificationMessage();
-		setNewName("");
-		setNewNumber("");
 	};
 
 	const addInfos = () => {
@@ -52,9 +46,19 @@ const App = () => {
 			number: newNumber,
 		};
 
-		peopleService.addPerson(person).then((addedPerson) => {
-			setPeople(people.concat(addedPerson));
-		});
+		peopleService
+			.addPerson(person)
+			.then((addedPerson) => {
+				setPeople(people.concat(addedPerson));
+				showNotificationMessage("success", `Added ${newName}`);
+				setNewName("");
+				setNewNumber("");
+			})
+			.catch((error) => {
+				console.log(error);
+
+				showNotificationMessage("error", error.response.data.error);
+			});
 	};
 
 	const updateInfos = (person) => {
@@ -62,10 +66,12 @@ const App = () => {
 			.updatePerson({ ...person, number: newNumber })
 			.then((updatedPerson) => {
 				setPeople(people.map((p) => (p.id === updatedPerson.id ? updatedPerson : p)));
+				showNotificationMessage("success", `Updated ${person.name}`);
+				setNewName("");
+				setNewNumber("");
 			})
 			.catch((error) => {
 				showNotificationMessage("error", error.message);
-				hideNotificationMessage();
 			});
 	};
 
@@ -88,26 +94,25 @@ const App = () => {
 				.then(() => {
 					setPeople(people.filter((p) => person.id !== p.id));
 					showNotificationMessage("success", `Deleted ${person.name}`);
-					hideNotificationMessage();
 				})
 				.catch(() => {
 					showNotificationMessage(
 						"error",
 						`Information of ${person.name} has already been removed from the server`
 					);
-					hideNotificationMessage();
 				});
 	};
 
 	const showNotificationMessage = (type, message) => {
 		setType(type);
 		setNotificationMessage(message);
+		hideNotificationMessage();
 	};
 
 	const hideNotificationMessage = () => {
 		setTimeout(() => {
 			setNotificationMessage(null);
-		}, 3000);
+		}, 5000);
 	};
 
 	return (
