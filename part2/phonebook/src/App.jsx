@@ -71,7 +71,7 @@ const App = () => {
 				setNewNumber("");
 			})
 			.catch((error) => {
-				showNotificationMessage("error", error.message);
+				showNotificationMessage("error", error.response.data.error);
 			});
 	};
 
