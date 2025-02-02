@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Blog from VSCode",
+    "author": "NM",
+    "url": "url/to/vscode-blog",
+    "likes": 200
+}
