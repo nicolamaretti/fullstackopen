@@ -65,3 +65,66 @@ describe("total likes", () => {
 		assert.strictEqual(list_helper.totalLikes(blogs), sum);
 	});
 });
+
+describe("favourite blog", () => {
+	test("when list of blogs is empty, is an empty object", () => {
+		assert.deepStrictEqual(list_helper.favouriteBlog([]), {});
+	});
+
+	test("when list has only one blog, equals that blog", () => {
+		const blogs = [
+			{
+				_id: "679fc9387e4d2b9054bdc6c3",
+				author: "NM",
+				title: "New blog",
+				url: "url/to/new-blog",
+				likes: 25,
+			},
+		];
+
+		assert.deepStrictEqual(list_helper.favouriteBlog(blogs), {
+			author: "NM",
+			title: "New blog",
+			likes: 25,
+		});
+	});
+
+	test("of a bigger list is calculated right", () => {
+		const blogs = [
+			{
+				_id: "679fc9387e4d2b9054bdc6c3",
+				author: "NM",
+				title: "New blog",
+				url: "url/to/new-blog",
+				likes: 20,
+			},
+			{
+				_id: "679fc9387e4d2b9054bdc6c3",
+				author: "NM",
+				title: "New blog",
+				url: "url/to/new-blog",
+				likes: 25,
+			},
+			{
+				_id: "679fc9387e4d2b9054bdc6c3",
+				author: "NM",
+				title: "New blog",
+				url: "url/to/new-blog",
+				likes: 2,
+			},
+			{
+				_id: "679fc9387e4d2b9054bdc6c3",
+				author: "NM",
+				title: "New blog",
+				url: "url/to/new-blog",
+				likes: 560,
+			},
+		];
+
+		assert.deepStrictEqual(list_helper.favouriteBlog(blogs), {
+			author: "NM",
+			title: "New blog",
+			likes: 560,
+		});
+	});
+});
